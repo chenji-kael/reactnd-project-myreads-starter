@@ -19,7 +19,7 @@ export default class ShelfPage extends React.Component {
   }
 
   changeShelf = (id, dstShelf) => {
-    const altered = this.state.books.map((book) => {
+    const books = this.state.books.map((book) => {
       if (book.id === id) {
         BooksAPI.update(book, dstShelf).then((resp) => {
         })
@@ -28,7 +28,7 @@ export default class ShelfPage extends React.Component {
         return {...book}
       }
     })
-    this.setState({books: altered})
+    this.setState({books})
   }
 
   render() {

@@ -22,15 +22,11 @@ export default class SearchPage extends Component {
 
   syncBook = (book) => {
     const currentBook = this.state.books.find(b => b.id === book.id)
-    if (currentBook !== undefined) {
-      return currentBook
-    } else {
-      return {...book, shelf: "none"}
-    }
+    return !!currentBook ? currentBook : {...book, shelf: "none"}
   }
 
   changeShelf = (id, dstShelf) => {
-    const altered = this.state.searchBooks.map((book) => {
+    const searchBooks = this.state.searchBooks.map((book) => {
       if (book.id === id) {
         BooksAPI.update(book, dstShelf).then((resp) => {
         })
@@ -39,11 +35,11 @@ export default class SearchPage extends Component {
         return {...book}
       }
     })
-    this.setState({searchBooks: altered})
+    this.setState({searchBooks})
   }
 
   inputHandle = _.debounce((event) => {
-    this.setState({query: event.target.value}, () => {
+    this.setState({query: event.target.value.trim()}, () => {
       if (this.state.query !== "") {
         BooksAPI.search(this.state.query, 100).then((books) => {
           if (books.length > 0) {
